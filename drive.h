@@ -10,14 +10,28 @@
 #define __DRIVE_H__
 
 #include <Arduino.h>
+#include "colors.h"
 
 struct Drive {
 public:
-  void forward(int time);
-  void backward(int time);
+  void forward();
+  void backward();
+  void leftCurveTurn();
+  void leftSoftCurveTurn();
+  void rightCurveTurn();
+  void rightSoftCurveTurn();
+  void stop();
+
+  void leftFollowLine(color c);
+  void rightFollowLine(color c);
+  void forwardToWall();
+  void forwardToColor(color c);
+
+  void forwardFor(int time);
+  void backwardFor(int time);
   void leftPointTurn(unsigned long degrees);
   void rightPointTurn(unsigned long degrees);
-  void stop(int time);
+  void stopFor(int time);
 };
 
 #endif

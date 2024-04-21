@@ -15,13 +15,13 @@
 color getColor() {
   int blueIn, redIn;
   
-  digitalWrite(Pins::redLED, LOW);
-  digitalWrite(Pins::blueLED, HIGH);
+  digitalWrite(Pins::redSensorLED, LOW);
+  digitalWrite(Pins::blueSensorLED, HIGH);
   millisDelay(1);
   blueIn = analogRead(Pins::colorIn);
 
-  digitalWrite(Pins::redLED, HIGH);
-  digitalWrite(Pins::blueLED, LOW);
+  digitalWrite(Pins::redSensorLED, HIGH);
+  digitalWrite(Pins::blueSensorLED, LOW);
   millisDelay(1);
   redIn = analogRead(Pins::colorIn);
 

@@ -13,15 +13,33 @@
 
 class Pins {
 public:
+  // PWM motor pins for variable speed, turning
   const static int motor1;
   const static int motor2;
   const static int motor3;
   const static int motor4;
-  const static int commLED;
-  const static int redLED;
-  const static int blueLED;
+
+  // Color detection system for path following
+  const static int redSensorLED;
+  const static int blueSensorLED;
   const static int colorIn;
-  void setPins();
+
+  // IR detection system for collision
+  const static int collisionLED;
+  const static int collisionIn;
+
+  // IR detection system for communication
+  const static int commLED;
+  const static int commIn;
+
+  // Indicators
+  const static int headlights;
+  const static int brakelights;
+  const static int redStateLED;
+  const static int blueStateLED;
+  const static int horn;
+
+  void setPins(bool detect_collisions=true);
 };
 
 #endif

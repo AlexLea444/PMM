@@ -11,9 +11,15 @@
 
 #include <Arduino.h>
 
-struct Light_Comm {
+class Light_Comm {
 public:
-  void send(uint8_t bit_sequence);
-}
+  Light_Comm();
+  void chall1_send();
+  void chall1_receive();
+
+private:
+  const static int threshold;
+  void chall1_msg_received();
+};
 
 #endif
