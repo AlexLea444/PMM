@@ -28,12 +28,15 @@ public:
   void rightSoftCurveTurn();
   void stop();
 
+  void chall5();
+
   void leftFollowLine(color c);
   void rightFollowLine(color c);
   void forwardToWall();
   void forwardToColor(color c);
 
   void forwardFor(int time);
+  void forwardForScaled(int time, float scaler);
   void backwardFor(int time);
   void leftPointTurn(unsigned long degrees);
   void rightPointTurn(unsigned long degrees);

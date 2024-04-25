@@ -24,6 +24,23 @@ color getColor() {
     return black;
 }
 
+color getColorPrecise() {
+  int sum = 0;
+  for (int i = 0; i < 5; i++) {
+    sum += analogRead(Pins::colorIn);
+  }
+  int reading = sum / 5;
+
+  if (reading > 700)
+    return yellow;
+  if (reading > 620)
+    return red;
+  if (reading > 520)
+    return blue;
+  else
+    return black;
+}
+
 String colorToString(color toPrint) {
   switch (toPrint) {
     case red:

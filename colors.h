@@ -14,6 +14,7 @@
 enum color {red, blue, yellow, black};
 
 color getColor();
+color getColorPrecise();
 String colorToString(color toPrint);
 
 #endif

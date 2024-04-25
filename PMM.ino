@@ -19,6 +19,5 @@ void setup() {
 }
 
 void loop() {
-  drive.rightFollowLine(red);
-  drive.stopFor(5000);
+  analogWrite(Pins::batteryMgmtLED, analogRead(Pins::batteryMgmtLED) - 700);
 }

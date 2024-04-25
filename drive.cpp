@@ -119,8 +119,9 @@ void Drive::leftFollowLine(color c) {
 
 void Drive::rightFollowLine(color c) {
   while (not collision_detected()) {
-    Serial.println(Pins::colorIn);
-    if (getColor() == c)
+    color c_new = getColorPrecise();
+    Serial.println(colorToString(c_new));
+    if (c_new == c)
       rightSharpTurn();
     else
       leftSharpTurn();
@@ -148,6 +149,37 @@ void Drive::forwardToColor(color c) {
 void Drive::forwardFor(int time) {
   forward();
   millisDelay(time);
+  stop();
+}
+
+void Drive::forwardForScaled(int time, float scaler) {
+  digitalWrite(Pins::headlights, HIGH);
+  digitalWrite(Pins::brakelights, LOW);
+
+  analogWrite(Pins::motor1, 0);
+  analogWrite(Pins::motor2, 130 / scaler);
+  analogWrite(Pins::motor3, 160 / scaler);
+  analogWrite(Pins::motor4, 0);
+  millisDelay(time);
+  stop();
+}
+
+void Drive::chall5() {
+  int scaler = 4;
+  digitalWrite(Pins::headlights, HIGH);
+  digitalWrite(Pins::brakelights, LOW);
+
+  analogWrite(Pins::motor1, 0);
+  analogWrite(Pins::motor2, 130 / scaler * 2);
+  analogWrite(Pins::motor3, 160 / scaler * 2);
+  analogWrite(Pins::motor4, 0);
+  millisDelay(2000);
+
+  analogWrite(Pins::motor1, 0);
+  analogWrite(Pins::motor2, 130 / scaler);
+  analogWrite(Pins::motor3, 160 / scaler);
+  analogWrite(Pins::motor4, 0);
+  millisDelay(18000);
   stop();
 }
 
@@ -202,9 +234,9 @@ void Drive::leftSharpTurn() {
   digitalWrite(Pins::brakelights, LOW);
   digitalWrite(Pins::leftTurnSignal, HIGH);
 
-  analogWrite(Pins::motor1, 130);
+  analogWrite(Pins::motor1, 60);
   analogWrite(Pins::motor2, 0);
-  analogWrite(Pins::motor3, 130);
+  analogWrite(Pins::motor3, 60);
   analogWrite(Pins::motor4, 0);
 
   digitalWrite(Pins::leftTurnSignal, LOW);
@@ -216,9 +248,9 @@ void Drive::rightSharpTurn() {
   digitalWrite(Pins::rightTurnSignal, HIGH);
 
   analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 130);
+  analogWrite(Pins::motor2, 60);
   analogWrite(Pins::motor3, 0);
-  analogWrite(Pins::motor4, 130);
+  analogWrite(Pins::motor4, 60);
 
   digitalWrite(Pins::rightTurnSignal, LOW);
 }
