@@ -1,4 +1,4 @@
-#include <Arduino>
+#include <Arduino.h>
 
 #include "chall1.h"
 #include "utils.h"
@@ -9,7 +9,7 @@
 #include "wifi_comm.h"
 
 void Chall1::bot1_run() {
-  Drive drive;
+  Drive& drive = Drive::getInstance();
   Light_Comm lightComm;
   Wifi_Comm wifiComm;
 
@@ -30,15 +30,15 @@ void Chall1::bot1_run() {
 
   drive.rightPointTurn(100);
   
-  bot1_follow_red(drive);
+  bot1_follow_red();
 
-  wifiComm.chall1_red_bot1();
+  // wifiComm.chall1_red_bot1();
 
   drive.backwardFor(50);
   drive.leftPointTurn(90);
   
-  bot1_find_yellow(drive);
-  bot1_follow_yellow(drive);
+  bot1_find_yellow();
+  bot1_follow_yellow();
 
   wifiComm.chall1_yellow_bot1();
 
@@ -76,7 +76,8 @@ void Chall1::bot1_start() {
   millisDelay(150);
 }
 
-void Chall1::bot1_follow_red(Drive drive) {
+void Chall1::bot1_follow_red() {
+  Drive& drive = Drive::getInstance();
   drive.leftFollowLine(red);
 
   digitalWrite(Pins::redStateLED, HIGH);
@@ -84,7 +85,8 @@ void Chall1::bot1_follow_red(Drive drive) {
   digitalWrite(Pins::redStateLED, LOW);
 }
 
-void Chall1::bot1_find_yellow(Drive drive) {
+void Chall1::bot1_find_yellow() {
+  Drive& drive = Drive::getInstance();
   drive.leftSoftCurveTurn();
   while (getColor() != yellow)
     millisDelay(10);
@@ -103,20 +105,21 @@ void Chall1::bot1_find_yellow(Drive drive) {
   digitalWrite(Pins::yellowStateLED, HIGH);
 }
 
-void Chall1::bot1_follow_yellow(Drive drive) {
+void Chall1::bot1_follow_yellow() {
+  Drive& drive = Drive::getInstance();
   drive.leftPointTurn(90);
   drive.leftFollowLine(yellow);
 }
 
 void Chall1::bot2_run() {
-  Drive drive;
+  Drive& drive = Drive::getInstance();
   Light_Comm lightComm;
   Wifi_Comm wifiComm;
-  volatile char *prev_buffer = malloc(65);
+  // volatile char *prev_buffer = malloc(65);
 
   lightComm.chall1_receive();
   lightComm.chall1_send();
-  bot2_setup_polling(prev_buffer);
+  // bot2_setup_polling(prev_buffer);
 
   drive.stopFor(5000);
 
@@ -125,24 +128,25 @@ void Chall1::bot2_run() {
   drive.leftPointTurn(170);
 
   drive.forwardToColor(blue);
-  bot2_follow_blue(drive);
+  bot2_follow_blue();
 
   wifiComm.chall1_yellow_bot2();
 
   drive.backwardFor(50);
   drive.rightPointTurn(90);
 
-  bot2_find_yellow(drive);
-  bot2_follow_yellow(drive);
+  bot2_find_yellow();
+  bot2_follow_yellow();
 
   drive.rightPointTurn(80);
   drive.forwardToWall();
 
-  free(prev_buffer);
+  //free(prev_buffer);
   wifiComm.chall1_end();
 }
 
-void Chall1::bot2_follow_blue(Drive drive) {
+void Chall1::bot2_follow_blue() {
+  Drive& drive = Drive::getInstance();
   digitalWrite(Pins::blueStateLED, HIGH);
   drive.rightPointTurn(90);
   drive.rightFollowLine(blue);
@@ -150,7 +154,8 @@ void Chall1::bot2_follow_blue(Drive drive) {
   digitalWrite(Pins::greenStateLED, HIGH);
 }
 
-void Chall1::bot2_find_yellow(Drive drive) {
+void Chall1::bot2_find_yellow() {
+  Drive& drive = Drive::getInstance();
   drive.rightSoftCurveTurn();
   while (getColor() != yellow)
     millisDelay(10);
@@ -159,12 +164,13 @@ void Chall1::bot2_find_yellow(Drive drive) {
   digitalWrite(Pins::yellowStateLED, HIGH);
 }
 
-void Chall1::bot2_follow_yellow(Drive drive) {
+void Chall1::bot2_follow_yellow() {
+  Drive& drive = Drive::getInstance();
   drive.rightPointTurn(70);
   drive.rightFollowLine(yellow);
 }
 
-void Chall1::bot2_setup_polling(char *init) {
+/* void Chall1::bot2_setup_polling(char *init) {
   // These define's must be placed at the beginning before #include "megaAVR_TimerInterrupt.h"
   // _TIMERINTERRUPT_LOGLEVEL_ from 0 to 4
   // Don't define _TIMERINTERRUPT_LOGLEVEL_ > 0. Only for special ISR debugging only. Can hang the system.
@@ -215,4 +221,4 @@ void bot2_poll_isr(char *prev) {
   if (!received) {
     received = WifiComm::chall1_red_bot2_poll(prev);
   }
-}
+} */

@@ -21,7 +21,7 @@ private:
   static const char pass[];
   static const int keyIndex;
   static const int portNumber;
-  static const int status;
+  static int status;
 
   static const char server[];
   static const char postRoute[];

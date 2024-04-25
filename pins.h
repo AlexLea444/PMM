@@ -20,26 +20,31 @@ public:
   const static int motor4;
 
   // Color detection system for path following
-  const static int redSensorLED;
-  const static int blueSensorLED;
   const static int colorIn;
 
   // IR detection system for collision
-  const static int collisionLED;
   const static int collisionIn;
 
   // IR detection system for communication
   const static int commLED;
   const static int commIn;
 
+  // Battery management system
+  const static int batteryMgmtLED;
+  const static int batteryMgmtIn;
+
   // Indicators
   const static int headlights;
   const static int brakelights;
+  const static int leftTurnSignal;
+  const static int rightTurnSignal;
   const static int redStateLED;
   const static int blueStateLED;
+  const static int greenStateLED;
+  const static int yellowStateLED;
   const static int horn;
 
-  void setPins(bool detect_collisions=true);
+  void setPins();
 };
 
 #endif

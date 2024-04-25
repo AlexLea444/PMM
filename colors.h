@@ -10,11 +10,10 @@
 #define __COLORS_H__
 
 #include <Arduino.h>
-#include <string>
 
 enum color {red, blue, yellow, black};
 
 color getColor();
-std::string colorToString(color toPrint);
+String colorToString(color toPrint);
 
 #endif

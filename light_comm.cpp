@@ -68,7 +68,7 @@ void Light_Comm::chall1_receive() {
  * Purpose: Flash headlights, brake lights, and honk horn twice.
  * Note: Loop is 'unrolled' to maintain 50% duty cycle
  */
-void Light_Comm::chal1_msg_received() {
+void Light_Comm::chall1_msg_received() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, HIGH);
   digitalWrite(Pins::horn, HIGH);

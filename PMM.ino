@@ -8,14 +8,17 @@
 
 #include "drive.h"
 #include "pins.h"
+#include "colors.h"
 
-Drive drive;
+Drive& drive = Drive::getInstance();
 Pins pins;
 
 void setup() {
+  Serial.begin(9600);
   pins.setPins();
 }
 
 void loop() {
-  drive.forward(1000);
+  drive.rightFollowLine(red);
+  drive.stopFor(5000);
 }

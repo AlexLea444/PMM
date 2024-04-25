@@ -19,7 +19,7 @@ const char Wifi_Comm::ssid[] = SECRET_SSID;        // network SSID (name)
 const char Wifi_Comm::pass[] = SECRET_PASS;    // network password (use for WPA, or use as key for WEP)
 const int Wifi_Comm::keyIndex = 0;             // network key Index number (needed only for WEP)
 const int Wifi_Comm::portNumber = 80;          // defult 
-const int Wifi_Comm::status = WL_IDLE_STATUS;
+int Wifi_Comm::status = WL_IDLE_STATUS;
 
 // DNS:
 const char Wifi_Comm::server[] = "ee31.ece.tufts.edu";    // name address for (using DNS)
@@ -100,7 +100,7 @@ void Wifi_Comm::GETServer(char *message) {
         char c = client.read();
         message[messageIndex++] = c;
         // Check if the buffer is full
-        if (messageIndex >= buffer_size) {
+        if (messageIndex >= 64) {
           break; // Stop reading to avoid overflow
         }
       }
@@ -151,7 +151,8 @@ void Wifi_Comm::chall1_red_bot1() {
   char response[64];
   GETServer(response);
 
-  char prev[64] = strcpy(response);
+  char prev[64];
+  strcpy(prev, response);
   POSTServer("finito rojo");
 
   while (strcmp(prev, response))
@@ -178,18 +179,19 @@ void Wifi_Comm::chall1_yellow_bot1() {
 }
 
 void Wifi_Comm::chall1_red_bot2_setup(char *buff) {
-  GetServer(buff);
+  GETServer(buff);
 }
 
 bool Wifi_Comm::chall1_red_bot2_poll(char *prev) {
-  char new = malloc(65);
-  GETServer(new);
+  Drive& drive = Drive::getInstance();
+  char updated = malloc(65);
+  GETServer(updated);
 
-  bool server_updated = strcmp(new, prev);
-  free(new);
+  bool server_updated = strcmp(updated, prev);
+  free(updated);
 
   if (server_updated) {
-    Drive::stop();
+    drive.stop();
 
     digitalWrite(Pins::redStateLED, HIGH);
     millisDelay(150);
@@ -205,7 +207,7 @@ void Wifi_Comm::chall1_yellow_bot2() {
   char received = malloc(65);
 
   while (strcmp(received, "finito amarillo")) {
-    GetServer(received);
+    GETServer(received);
     Serial.print(received);
     millisDelay(100);
   }

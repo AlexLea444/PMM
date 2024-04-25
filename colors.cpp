@@ -8,37 +8,23 @@
 
 #include "colors.h"
 #include <Arduino.h>
-#include <string>
 #include "pins.h"
 #include "utils.h"
 
 color getColor() {
-  int blueIn, redIn;
-  
-  digitalWrite(Pins::redSensorLED, LOW);
-  digitalWrite(Pins::blueSensorLED, HIGH);
-  millisDelay(1);
-  blueIn = analogRead(Pins::colorIn);
+  int reading = analogRead(Pins::colorIn);
 
-  digitalWrite(Pins::redSensorLED, HIGH);
-  digitalWrite(Pins::blueSensorLED, LOW);
-  millisDelay(1);
-  redIn = analogRead(Pins::colorIn);
-
-  if (blueIn > 750) {
-    if (redIn > 750) {
-      return yellow;
-    } else {
-      return blue;
-    }
-  } else if (redIn > 750) {
+  if (reading > 700)
+    return yellow;
+  if (reading > 620)
     return red;
-  } else {
+  if (reading > 520)
+    return blue;
+  else
     return black;
-  }
 }
 
-std::string colorToString(color toPrint) {
+String colorToString(color toPrint) {
   switch (toPrint) {
     case red:
       return "red";

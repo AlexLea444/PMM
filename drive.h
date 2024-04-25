@@ -12,12 +12,18 @@
 #include <Arduino.h>
 #include "colors.h"
 
-struct Drive {
+class Drive {
 public:
+  // Static method to get the instance
+  static Drive& getInstance();
+
+  // Function declarations
   void forward();
   void backward();
+  void leftSharpTurn();
   void leftCurveTurn();
   void leftSoftCurveTurn();
+  void rightSharpTurn();
   void rightCurveTurn();
   void rightSoftCurveTurn();
   void stop();
@@ -32,6 +38,14 @@ public:
   void leftPointTurn(unsigned long degrees);
   void rightPointTurn(unsigned long degrees);
   void stopFor(int time);
+
+private:
+  // Private constructor to prevent instantiation
+  Drive() {}
+
+  // Prevent copying of the instance
+  Drive(const Drive&) = delete;
+  void operator=(const Drive&) = delete;
 };
 
 #endif
