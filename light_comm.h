@@ -13,9 +13,10 @@
 
 class Light_Comm {
 public:
-  Light_Comm();
   void chall1_send();
   void chall1_receive();
+  void chall4_send();
+  void chall4_receive();
 
 private:
   const static int threshold;

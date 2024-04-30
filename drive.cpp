@@ -24,8 +24,8 @@ void Drive::forward() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
   analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 130);
-  analogWrite(Pins::motor3, 160);
+  analogWrite(Pins::motor2, 102);
+  analogWrite(Pins::motor3, 138);
   analogWrite(Pins::motor4, 0);
 }
 
@@ -56,8 +56,8 @@ void Drive::leftSoftCurveTurn() {
   digitalWrite(Pins::brakelights, LOW);
   digitalWrite(Pins::leftTurnSignal, HIGH);
   analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 130);
-  analogWrite(Pins::motor3, 160);
+  analogWrite(Pins::motor2, 70);
+  analogWrite(Pins::motor3, 60);
   analogWrite(Pins::motor4, 0);
   digitalWrite(Pins::leftTurnSignal, LOW);
 }
@@ -68,8 +68,8 @@ void Drive::rightSoftCurveTurn() {
   digitalWrite(Pins::brakelights, LOW);
   digitalWrite(Pins::rightTurnSignal, HIGH);
   analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 130);
-  analogWrite(Pins::motor3, 145);
+  analogWrite(Pins::motor2, 40);
+  analogWrite(Pins::motor3, 80);
   analogWrite(Pins::motor4, 0);
   digitalWrite(Pins::rightTurnSignal, LOW);
 }
@@ -97,13 +97,23 @@ void Drive::stop() {
 
 // TODO: Values might require tuning
 void Drive::leftFollowLine(color c) {
+  //Serial.println("STARTING LINE FOLLOW");
+  //forward();
   while (not collision_detected()) {
-    leftPointTurn(15);
-    rightCurveTurn();
-    while ((not collision_detected()) and (getColor() != c))
+    color c_new = getColorLineFollowing();
+    //Serial.println(colorToString(c_new));
+    
+    if (c_new == c) {
+      leftSoftCurveTurn();
       millisDelay(100);
+    } else {
+      rightSoftCurveTurn();
+      millisDelay(100);
+    }
+    millisDelay(10);
   }
   stop();
+  //Serial.println("ENDING LINE FOLLOW");
 }
 
 // TODO: Values might require tuning
@@ -118,30 +128,38 @@ void Drive::leftFollowLine(color c) {
 }*/
 
 void Drive::rightFollowLine(color c) {
+  //Serial.println("STARTING LINE FOLLOW");
+  //forward();
   while (not collision_detected()) {
-    color c_new = getColorPrecise();
-    Serial.println(colorToString(c_new));
-    if (c_new == c)
-      rightSharpTurn();
-    else
-      leftSharpTurn();
-    millisDelay(40);
-    stop();
+    color c_new = getColorLineFollowing();
+    //Serial.println(colorToString(c_new));
+    
+    if (c_new == c) {
+      rightSoftCurveTurn();
+      millisDelay(100);
+    } else {
+      leftSoftCurveTurn();
+      millisDelay(100);
+    }
+    millisDelay(10);
   }
+  stop();
+  //Serial.println("ENDING LINE FOLLOW");
 }
 
 void Drive::forwardToWall() {
   forward();
   while (not collision_detected())
     millisDelay(5);
-  stop();
+  stopFor(400);
 }
 
 void Drive::forwardToColor(color c) {
   forward();
-  while (getColor() != c) {
-    millisDelay(40);
-    Serial.println(colorToString(getColor()));
+  while (getColorPrecise() != c) {
+    Serial.println(analogRead(Pins::colorIn));
+    millisDelay(100);
+    //Serial.println(colorToString(getColor()));
   }
   stop();
 }
@@ -165,22 +183,19 @@ void Drive::forwardForScaled(int time, float scaler) {
 }
 
 void Drive::chall5() {
-  int scaler = 4;
-  digitalWrite(Pins::headlights, HIGH);
-  digitalWrite(Pins::brakelights, LOW);
+  millisDelay(5000);
 
-  analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 130 / scaler * 2);
-  analogWrite(Pins::motor3, 160 / scaler * 2);
-  analogWrite(Pins::motor4, 0);
-  millisDelay(2000);
+  forward();
+  millisDelay(10);
 
-  analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 130 / scaler);
-  analogWrite(Pins::motor3, 160 / scaler);
-  analogWrite(Pins::motor4, 0);
-  millisDelay(18000);
-  stop();
+  for (int i = 0; i < 3998; i++) {
+    if ((i % 12) and (i % 13))
+      stop();
+    else
+      forward();
+    millisDelay(5);
+  }
+
 }
 
 void Drive::backwardFor(int time) {

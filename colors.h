@@ -13,8 +13,10 @@
 
 enum color {red, blue, yellow, black};
 
+color analogToColor(int reading);
 color getColor();
 color getColorPrecise();
+color getColorLineFollowing();
 String colorToString(color toPrint);
 
 #endif

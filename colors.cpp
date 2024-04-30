@@ -11,17 +11,19 @@
 #include "pins.h"
 #include "utils.h"
 
-color getColor() {
-  int reading = analogRead(Pins::colorIn);
-
-  if (reading > 700)
+color analogToColor(int reading) {
+  if (reading > 950)
     return yellow;
-  if (reading > 620)
+  if (reading > 900)
     return red;
-  if (reading > 520)
+  if (reading > 600)
     return blue;
   else
     return black;
+}
+
+color getColor() {
+  return analogRead(Pins::colorIn);
 }
 
 color getColorPrecise() {
@@ -31,14 +33,23 @@ color getColorPrecise() {
   }
   int reading = sum / 5;
 
-  if (reading > 700)
-    return yellow;
-  if (reading > 620)
-    return red;
-  if (reading > 520)
-    return blue;
-  else
-    return black;
+  Serial.println(reading);
+
+  return analogToColor(reading);
+}
+
+
+color getColorLineFollowing() {
+  int sum = 0;
+  for (int i = 0; i < 5; i++) {
+    millisDelay(10);
+    sum += analogRead(Pins::colorIn);
+  }
+  int reading = sum / 5;
+
+  Serial.println(reading);
+
+  return analogToColor(reading);
 }
 
 String colorToString(color toPrint) {

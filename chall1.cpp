@@ -17,13 +17,13 @@ void Chall1::bot1_run() {
 
   drive.forwardToWall();
 
-  drive.rightPointTurn(160);
+  drive.rightPointTurn(200);
 
   drive.forwardToColor(red);
   digitalWrite(Pins::redStateLED, HIGH);
 
   drive.leftPointTurn(200);
-  drive.stop();
+  drive.stopFor(400);
 
   lightComm.chall1_send();
   lightComm.chall1_receive();
