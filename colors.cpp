@@ -16,7 +16,7 @@ color analogToColor(int reading) {
     return yellow;
   if (reading > 900)
     return red;
-  if (reading > 600)
+  if (reading > 800)
     return blue;
   else
     return black;

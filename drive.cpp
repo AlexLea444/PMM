@@ -24,18 +24,18 @@ void Drive::forward() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
   analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 102);
-  analogWrite(Pins::motor3, 138);
+  analogWrite(Pins::motor2, 100);
+  analogWrite(Pins::motor3, 142);
   analogWrite(Pins::motor4, 0);
 }
 
 void Drive::backward() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
-  analogWrite(Pins::motor1, 200);
+  analogWrite(Pins::motor1, 100);
   analogWrite(Pins::motor2, 0);
   analogWrite(Pins::motor3, 0);
-  analogWrite(Pins::motor4, 130);
+  analogWrite(Pins::motor4, 136);
 }
 
 // TODO: Values might require tuning
@@ -210,7 +210,7 @@ void Drive::leftPointTurn(unsigned long degrees) {
   digitalWrite(Pins::brakelights, LOW);
   digitalWrite(Pins::leftTurnSignal, HIGH);
 
-  unsigned long time = (degrees * 438)/90;
+  unsigned long time = (degrees * 441)/90;
   //int time = math / 90;
   analogWrite(Pins::motor1, 130);
   analogWrite(Pins::motor2, 0);
@@ -223,6 +223,51 @@ void Drive::leftPointTurn(unsigned long degrees) {
   stopFor(10);
 }
 
+
+void Drive::leftSoundTurn() {
+  digitalWrite(Pins::headlights, HIGH);
+  digitalWrite(Pins::brakelights, LOW);
+  digitalWrite(Pins::leftTurnSignal, HIGH);
+
+  //int time = math / 90;
+  analogWrite(Pins::motor1, 110);
+  analogWrite(Pins::motor2, 0);
+  analogWrite(Pins::motor3, 110);
+  analogWrite(Pins::motor4, 0);
+
+  for (int i = 0; i < 939; i++) {
+    digitalWrite(Pins::horn, HIGH); // Set the output pin HIGH
+    delayMicroseconds(i); // Delay for half of the square wave period (208 us)
+    digitalWrite(Pins::horn, LOW); // Set the output pin LOW
+    delayMicroseconds(i); // Delay for half of the square wave period (208 us)
+  }
+
+  digitalWrite(Pins::leftTurnSignal, LOW);
+  stopFor(10);
+}
+
+void Drive::rightSoundTurn() {
+  digitalWrite(Pins::headlights, HIGH);
+  digitalWrite(Pins::brakelights, LOW);
+  digitalWrite(Pins::rightTurnSignal, HIGH);
+
+  analogWrite(Pins::motor1, 0);
+  analogWrite(Pins::motor2, 110);
+  analogWrite(Pins::motor3, 0);
+  analogWrite(Pins::motor4, 110);
+
+  for (int i = 936; i > 0; i--) {
+    digitalWrite(Pins::horn, HIGH); // Set the output pin HIGH
+    delayMicroseconds(i); // Delay for half of the square wave period (208 us)
+    digitalWrite(Pins::horn, LOW); // Set the output pin LOW
+    delayMicroseconds(i); // Delay for half of the square wave period (208 us)
+  }
+
+  digitalWrite(Pins::rightTurnSignal, LOW);
+  stopFor(10);
+}
+
+
 //NOTE : For some reason the right wheel does not like to go backwards
 // for values less than 130 idk why
 //Found that delay of 750 is 90 degreees
@@ -231,7 +276,7 @@ void Drive::rightPointTurn(unsigned long degrees) {
   digitalWrite(Pins::brakelights, LOW);
   digitalWrite(Pins::rightTurnSignal, HIGH);
 
-  unsigned long time = (degrees * 330)/90;
+  unsigned long time = (degrees * 438)/90;
   //int time = time / 90;
   analogWrite(Pins::motor1, 0);
   analogWrite(Pins::motor2, 130);
@@ -269,6 +314,7 @@ void Drive::rightSharpTurn() {
 
   digitalWrite(Pins::rightTurnSignal, LOW);
 }
+
 
 
 void Drive::stopFor(int time) {

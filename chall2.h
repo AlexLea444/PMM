@@ -6,7 +6,7 @@
 
 class Chall2 {
 public:
-  void run();
+  void run(bool bot1);
 };
 
 #endif

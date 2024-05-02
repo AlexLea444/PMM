@@ -22,9 +22,11 @@ public:
   void backward();
   void leftSharpTurn();
   void leftCurveTurn();
+  void leftSoundTurn();
   void leftSoftCurveTurn();
   void rightSharpTurn();
   void rightCurveTurn();
+  void rightSoundTurn();
   void rightSoftCurveTurn();
   void stop();
 

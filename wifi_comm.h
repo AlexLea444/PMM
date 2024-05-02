@@ -16,6 +16,9 @@ public:
   void chall1_end();
 
   void printWifiStatus();
+
+  void POSTServer(char *bodyMessage);
+  void GETServer(char *message);
 private:
   static const char ssid[];
   static const char pass[];
@@ -29,9 +32,6 @@ private:
   WiFiClient client;
 
   bool chall1_bot1 = false;
-
-  void POSTServer(char *bodyMessage);
-  void GETServer(char *message);
 };
 
 #endif

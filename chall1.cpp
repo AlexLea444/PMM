@@ -19,7 +19,8 @@ void Chall1::bot1_run() {
 
   drive.rightPointTurn(200);
 
-  drive.forwardToColor(red);
+  //drive.forwardToColor(red);
+  bot1_find_red();
   digitalWrite(Pins::redStateLED, HIGH);
 
   drive.leftPointTurn(200);
@@ -48,6 +49,21 @@ void Chall1::bot1_run() {
   drive.forwardToWall();
 
   wifiComm.chall1_end();
+}
+
+void Chall1::bot1_find_red() {
+  Drive& drive = Drive::getInstance();
+  drive.forward();
+  color c;
+  color prev = getColorPrecise();
+  int line_count = 0;
+  while (line_count < 3) {
+    c = getColorPrecise();
+    if ((c != black) && (prev == black)) {
+      line_count++;
+    }
+    prev = c;
+  }
 }
 
 void Chall1::bot1_start() {

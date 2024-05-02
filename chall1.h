@@ -10,6 +10,7 @@ public:
   void bot2_run();
 private:
   void bot1_start();
+  void bot1_find_red();
   void bot1_follow_red();
   void bot1_find_yellow();
   void bot1_follow_yellow();

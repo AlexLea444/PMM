@@ -26,11 +26,16 @@ const char Wifi_Comm::server[] = "ee31.ece.tufts.edu";    // name address for (u
 
 // format of postRoute: "POST /senderID/receiverID HTTP/1.1"
 // char postRoute[] = "POST /89C87865077A/8050D1451904 HTTP/1.1"; // posting will fail with this ID combo, no idea why
-const char Wifi_Comm::postRoute[] = "POST /89C87865077A/A20F65BA5E3C HTTP/1.1"; // sending from ourselves to ourselves
+// sending from ourselves to ourselves:
+//const char Wifi_Comm::postRoute[] = "POST /89C87865077A/89C87865077A HTTP/1.1"; 
+
+// sending from ourselves to Team Team Red:
+const char Wifi_Comm::postRoute[] = "POST /89C87865077A/A20F65BA5E3C HTTP/1.1";
 
 // format of gettRoute: "GET /senderID/receiverID HTTP/1.1"
 // char getRoute[] = "GET /89C87865077A/8050D1451904 HTTP/1.1";
-const char Wifi_Comm::getRoute[] = "GET /89C87865077A/A20F65BA5E3C HTTP/1.1"; 
+const char Wifi_Comm::getRoute[] = "GET /89C87865077A/A20F65BA5E3C HTTP/1.1";
+//const char Wifi_Comm::getRoute[] = "GET /A20F65BA5E3C/89C87865077A HTTP/1.1"; 
 
 void Wifi_Comm::printWifiStatus() {
   // print the SSID of the network you're attached to:
@@ -60,7 +65,7 @@ void Wifi_Comm::POSTServer(char *bodyMessage) {
     client.println(); // end HTTP header
     client.print(bodyMessage);
 
-    millisDelay(200);
+    millisDelay(2000);
 
     // print out the client response
     while (client.connected()) {
@@ -100,7 +105,7 @@ void Wifi_Comm::GETServer(char *message) {
         char c = client.read();
         message[messageIndex++] = c;
         // Check if the buffer is full
-        if (messageIndex >= 64) {
+        if (messageIndex >= 512) {
           break; // Stop reading to avoid overflow
         }
       }
