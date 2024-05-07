@@ -1,3 +1,11 @@
+/*
+ * chall1.h
+ * Purple Mountain Majesties
+ *  - Alexander Lea, Connor Nightingale, Eddy Zhang, Jacob Carulli
+ * Spring 2024
+ *
+ */
+
 #ifndef __CHALL1_H__
 #define __CHALL1_H__
 

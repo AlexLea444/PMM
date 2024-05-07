@@ -1,3 +1,14 @@
+/*
+ * chall1.h
+ * Purple Mountain Majesties
+ *  - Alexander Lea, Connor Nightingale, Eddy Zhang, Jacob Carulli
+ * Spring 2024
+ *
+ * Note: Code is largely unlabeled as it is written primarily as "single-use".
+ *        Function names should serve useful, otherwise see the EE31 Project
+ *        Description for a comprehensive understanding of this challenge.
+ */
+ 
 #include <Arduino.h>
 
 #include "chall1.h"
@@ -8,6 +19,12 @@
 #include "light_comm.h"
 #include "wifi_comm.h"
 
+/* Function: bot1_run
+ * Description: Run with companion bot to demonstrate challenge 1
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Chall1::bot1_run() {
   Drive& drive = Drive::getInstance();
   Light_Comm light_comm;
@@ -127,6 +144,12 @@ void Chall1::bot1_follow_yellow() {
   drive.rightFollowLine(yellow);
 }
 
+/* Function: bot2_run
+ * Description: Run with companion bot to demonstrate challenge 1
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Chall1::bot2_run() {
   Drive& drive = Drive::getInstance();
   Light_Comm light_comm;

@@ -30,6 +30,12 @@ void Drive::forward() {
   analogWrite(Pins::motor4, 0);
 }
 
+/* Function: forwardAt
+ * Description: Set drive forward at speed determined by scaler
+ * Parameters:
+ *   - scaler: number between 0 and 1 specifying speed of bot
+ * Returns: None
+ */
 void Drive::forwardAt(float scaler) {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -39,6 +45,12 @@ void Drive::forwardAt(float scaler) {
   analogWrite(Pins::motor4, 0);  
 }
 
+/* Function: backward
+ * Description: Set drive backward at set speed
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::backward() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -48,7 +60,12 @@ void Drive::backward() {
   analogWrite(Pins::motor4, 136);
 }
 
-// TODO: Values might require tuning
+/* Function: leftCurveTurn
+ * Description: Set drive curving left at set speed
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::leftCurveTurn() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -60,7 +77,12 @@ void Drive::leftCurveTurn() {
   digitalWrite(Pins::leftTurnSignal, LOW);
 }
 
-// TODO: Values might require tuning
+/* Function: leftSoftCurveTurn
+ * Description: Set drive curving softly left at set speed
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::leftSoftCurveTurn() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -72,7 +94,12 @@ void Drive::leftSoftCurveTurn() {
   digitalWrite(Pins::leftTurnSignal, LOW);
 }
 
-// TODO: Values might require tuning
+/* Function: rightSoftCurveTurn
+ * Description: Set drive curving softly right at set speed
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::rightSoftCurveTurn() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -84,7 +111,12 @@ void Drive::rightSoftCurveTurn() {
   digitalWrite(Pins::rightTurnSignal, LOW);
 }
 
-// TODO: Values might require tuning
+/* Function: rightCurveTurn
+ * Description: Set drive curving right at set speed
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::rightCurveTurn() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -96,6 +128,13 @@ void Drive::rightCurveTurn() {
   digitalWrite(Pins::rightTurnSignal, LOW);
 }
 
+
+/* Function: stop
+ * Description: Cut power to all motors
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::stop() {
   digitalWrite(Pins::headlights, LOW);
   digitalWrite(Pins::brakelights, HIGH);
@@ -105,7 +144,12 @@ void Drive::stop() {
   analogWrite(Pins::motor4, 0);
 }
 
-// TODO: Values might require tuning
+/* Function: leftFollowLine
+ * Description: Follow along the left side of a colored line
+ * Parameters:
+ *   - c: color of line to follow
+ * Returns: None
+ */
 void Drive::leftFollowLine(color c) {
   //Serial.println("STARTING LINE FOLLOW");
   //forward();
@@ -126,17 +170,12 @@ void Drive::leftFollowLine(color c) {
   //Serial.println("ENDING LINE FOLLOW");
 }
 
-// TODO: Values might require tuning
-/*void Drive::rightFollowLine(color c) {
-  while (not collision_detected()) {
-    rightPointTurn(15);
-    leftCurveTurn();
-    while ((not collision_detected()) and (getColor() != c))
-      millisDelay(40);
-  }
-  stop();
-}*/
-
+/* Function: rightFollowLine
+ * Description: Follow along the right side of a colored line
+ * Parameters:
+ *   - c: color of line to follow
+ * Returns: None
+ */
 void Drive::rightFollowLine(color c) {
   //Serial.println("STARTING LINE FOLLOW");
   //forward();
@@ -157,6 +196,12 @@ void Drive::rightFollowLine(color c) {
   //Serial.println("ENDING LINE FOLLOW");
 }
 
+/* Function: forwardToWall
+ * Description: Drive forward until a collision is detected
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::forwardToWall() {
   forward();
   while (not collision_detected())
@@ -164,8 +209,13 @@ void Drive::forwardToWall() {
   stopFor(400);
 }
 
+/* Function: forwardToColor
+ * Description: Drive forward until a color is detected
+ * Parameters:
+ *   - c: color to stop at
+ * Returns: None
+ */
 void Drive::forwardToColor(color c) {
-
   forward();
   while (detectColor() != c) {}
   
@@ -184,12 +234,25 @@ void Drive::forwardToColor(color c) {
   }
 }
 
+/* Function: forwardFor
+ * Description: Drive forward for given time (in millis)
+ * Parameters:
+ *   - time: time in milliseconds
+ * Returns: None
+ */
 void Drive::forwardFor(int time) {
   forward();
   millisDelay(time);
   stop();
 }
 
+/* Function: forwardForScaled
+ * Description: Drive forward for given time (in millis), at given speed
+ * Parameters:
+ *   - time: time in milliseconds
+ *   - scaler: number between 0 and 1 specifying speed of bot
+ * Returns: None
+ */
 void Drive::forwardForScaled(int time, float scaler) {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -200,6 +263,12 @@ void Drive::forwardForScaled(int time, float scaler) {
   stop();
 }
 
+/* Function: chall5
+ * Description: Drive forward at a set, slow speed (requires tuning)
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::chall5() {
 
   forward();
@@ -218,13 +287,24 @@ void Drive::chall5() {
 
 }
 
+/* Function: backwardFor
+ * Description: Drive backward for given time (in millis)
+ * Parameters:
+ *   - time: time in milliseconds
+ * Returns: None
+ */
 void Drive::backwardFor(int time) {
    backward();
    millisDelay(time);
    stop();
 }
 
-//Found that delay of 900 is 90 degrees
+/* Function: leftPointTurn
+ * Description: Make a left point turn (tuned to 90 degrees)
+ * Parameters:
+ *   - degrees: number of degrees to turn about center axis
+ * Returns: None
+ */
 void Drive::leftPointTurn(unsigned long degrees) {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -243,7 +323,13 @@ void Drive::leftPointTurn(unsigned long degrees) {
   stopFor(10);
 }
 
-
+/* Function: leftSoundTurn
+ * Description: Make a left point turn (about 100 degrees),
+ *              playing sound that ramps up over time
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::leftSoundTurn() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -266,6 +352,13 @@ void Drive::leftSoundTurn() {
   stopFor(10);
 }
 
+/* Function: rightSoundTurn
+ * Description: Make a right point turn (about 100 degrees),
+ *              playing sound that ramps up over time
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Drive::rightSoundTurn() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -287,10 +380,12 @@ void Drive::rightSoundTurn() {
   stopFor(10);
 }
 
-
-//NOTE : For some reason the right wheel does not like to go backwards
-// for values less than 130 idk why
-//Found that delay of 750 is 90 degreees
+/* Function: rightPointTurn
+ * Description: Make a right point turn (tuned to 90 degrees)
+ * Parameters:
+ *   - degrees: number of degrees to turn about center axis
+ * Returns: None
+ */
 void Drive::rightPointTurn(unsigned long degrees) {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
@@ -309,37 +404,25 @@ void Drive::rightPointTurn(unsigned long degrees) {
   stopFor(10);
 }
 
-void Drive::leftSharpTurn() {
-  digitalWrite(Pins::headlights, HIGH);
-  digitalWrite(Pins::brakelights, LOW);
-  digitalWrite(Pins::leftTurnSignal, HIGH);
-
-  analogWrite(Pins::motor1, 60);
-  analogWrite(Pins::motor2, 0);
-  analogWrite(Pins::motor3, 60);
-  analogWrite(Pins::motor4, 0);
-
-  digitalWrite(Pins::leftTurnSignal, LOW);
-}
-
-void Drive::rightSharpTurn() {
-  digitalWrite(Pins::headlights, HIGH);
-  digitalWrite(Pins::brakelights, LOW);
-  digitalWrite(Pins::rightTurnSignal, HIGH);
-
-  analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 60);
-  analogWrite(Pins::motor3, 0);
-  analogWrite(Pins::motor4, 60);
-
-  digitalWrite(Pins::rightTurnSignal, LOW);
-}
-
+/* Function: stopFor
+ * Description: Cut power to motors for given time (in millis)
+ * Parameters:
+ *   - time: time in milliseconds
+ * Returns: None
+ */
 void Drive::stopFor(int time) {
   stop();
   millisDelay(time);
 }
 
+/* Function: forwardTrapezoidal
+ * Description: Drive forward with modular acceleration and deceleration 
+ * Parameters:
+ *   - total_time: time in milliseconds of total function call (approx.)
+ *   - pct_at_vmax: pct of time that should be spent at max velocity (0 to 1)
+ *   - vmax: maximum velocity, a scaler between 0 and 1
+ * Returns: None
+ */
 void Drive::forwardTrapezoidal(int total_time, float pct_at_vmax, float vmax) {
   float top_time = total_time * pct_at_vmax;
   float acceleration_time = ((float)total_time - top_time) / 2;
@@ -352,23 +435,23 @@ void Drive::forwardTrapezoidal(int total_time, float pct_at_vmax, float vmax) {
     return;
   }
 
+  // accelerate to vmax
   auto start_time = millis();
   while (millis() < start_time + acceleration_time) {
-    Serial.println("ACCELERATING");
     forwardAt(((float)(millis() - start_time) / acceleration_time) * vmax);
     delay(10);
   }
 
+  // drive at vmax
   start_time += acceleration_time;
   while (millis() < start_time + top_time) {
-    Serial.println("AT MAX VELOCITY");
     forwardAt(vmax);
     delay(10);
   }
 
+  // decelerate to 0
   start_time += top_time;
   while (millis() < start_time + acceleration_time) {
-    Serial.println("DECELERATING");
     forwardAt(vmax * (1 - ((float)(millis() - start_time) / acceleration_time)));
     delay(10);
   }

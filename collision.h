@@ -1,3 +1,11 @@
+/*
+ * collision.h
+ * Purple Mountain Majesties
+ *  - Alexander Lea, Connor Nightingale, Eddy Zhang, Jacob Carulli
+ * Spring 2024
+ *
+ */
+
 #ifndef __COLLISION_DETECTION_H__
 #define __COLLISION_DETECTION_H__
 

@@ -4,6 +4,10 @@
  *  - Alexander Lea, Connor Nightingale, Eddy Zhang, Jacob Carulli
  * 2/24/2024
  *
+ * Note: For the purpose of this course, code was expected to be reflashed
+ *        for each challenge. As such, this file should serve as a medium for
+ *        other functions to be called. Serial.begin(9600) and pins.setup()
+ *        should be called at start of setup() for full functionality.
  */
 
 #include "drive.h"
