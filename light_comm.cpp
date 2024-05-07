@@ -11,7 +11,7 @@
 #include "pins.h"
 #include "utils.h"
 
-const int Light_Comm::threshold = 150;
+const int Light_Comm::threshold = 900;
 
 
 /*
@@ -45,12 +45,14 @@ void Light_Comm::chall1_receive() {
 
   if (analogRead(Pins::commIn) < threshold) {
     Serial.println("Warning: Signal detected is not of proper format (low 1 not detected)");
+    delay(500);
     return;
   }
   delay(250);
 
   if (analogRead(Pins::commIn) < threshold) {
     Serial.println("Warning: Signal detected is not of proper format (high 2 not detected)");
+    delay(250);
     return;
   }
   delay(250);

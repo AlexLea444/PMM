@@ -10,30 +10,30 @@
 
 void Chall1::bot1_run() {
   Drive& drive = Drive::getInstance();
-  Light_Comm lightComm;
-  Wifi_Comm wifiComm;
+  Light_Comm light_comm;
+  Wifi_Comm wifi_comm;
+
+  wifi_comm.setup();
 
   bot1_start();
 
   drive.forwardToWall();
 
-  drive.rightPointTurn(200);
+  drive.rightPointTurn(180);
 
-  //drive.forwardToColor(red);
-  bot1_find_red();
+  drive.forwardToColor(red);
   digitalWrite(Pins::redStateLED, HIGH);
 
   drive.leftPointTurn(200);
   drive.stopFor(400);
 
-  lightComm.chall1_send();
-  lightComm.chall1_receive();
+  wifi_comm.chall1_go_bot1();
 
   drive.rightPointTurn(100);
   
   bot1_follow_red();
 
-  // wifiComm.chall1_red_bot1();
+  wifi_comm.chall1_red_bot1();
 
   drive.backwardFor(50);
   drive.leftPointTurn(90);
@@ -41,14 +41,17 @@ void Chall1::bot1_run() {
   bot1_find_yellow();
   bot1_follow_yellow();
 
-  wifiComm.chall1_yellow_bot1();
+  wifi_comm.chall1_yellow_bot1();
 
   drive.backwardFor(50);
   drive.leftPointTurn(110);
 
   drive.forwardToWall();
 
-  wifiComm.chall1_end();
+  drive.leftPointTurn(130);
+  drive.backwardFor(500);
+
+  wifi_comm.chall1_end();
 }
 
 void Chall1::bot1_find_red() {
@@ -94,7 +97,7 @@ void Chall1::bot1_start() {
 
 void Chall1::bot1_follow_red() {
   Drive& drive = Drive::getInstance();
-  drive.leftFollowLine(red);
+  drive.rightFollowLine(red);
 
   digitalWrite(Pins::redStateLED, HIGH);
   millisDelay(150);
@@ -103,10 +106,7 @@ void Chall1::bot1_follow_red() {
 
 void Chall1::bot1_find_yellow() {
   Drive& drive = Drive::getInstance();
-  drive.leftSoftCurveTurn();
-  while (getColor() != yellow)
-    millisDelay(10);
-  drive.stop();
+  drive.forwardToColor(yellow);
 
   digitalWrite(Pins::horn, HIGH);
   millisDelay(150);
@@ -124,18 +124,16 @@ void Chall1::bot1_find_yellow() {
 void Chall1::bot1_follow_yellow() {
   Drive& drive = Drive::getInstance();
   drive.leftPointTurn(90);
-  drive.leftFollowLine(yellow);
+  drive.rightFollowLine(yellow);
 }
 
 void Chall1::bot2_run() {
   Drive& drive = Drive::getInstance();
-  Light_Comm lightComm;
-  Wifi_Comm wifiComm;
-  // volatile char *prev_buffer = malloc(65);
+  Light_Comm light_comm;
+  Wifi_Comm wifi_comm;
+  wifi_comm.setup();
 
-  lightComm.chall1_receive();
-  lightComm.chall1_send();
-  // bot2_setup_polling(prev_buffer);
+  wifi_comm.chall1_go_bot2();
 
   drive.stopFor(5000);
 
@@ -146,7 +144,11 @@ void Chall1::bot2_run() {
   drive.forwardToColor(blue);
   bot2_follow_blue();
 
-  wifiComm.chall1_yellow_bot2();
+  wifi_comm.chall1_red_bot2();
+
+  wifi_comm.chall1_yellow_bot2();
+
+  delay(8000);
 
   drive.backwardFor(50);
   drive.rightPointTurn(90);
@@ -157,25 +159,24 @@ void Chall1::bot2_run() {
   drive.rightPointTurn(80);
   drive.forwardToWall();
 
-  //free(prev_buffer);
-  wifiComm.chall1_end();
+  drive.rightPointTurn(130);
+  drive.backwardFor(500);
+
+  wifi_comm.chall1_end();
 }
 
 void Chall1::bot2_follow_blue() {
   Drive& drive = Drive::getInstance();
   digitalWrite(Pins::blueStateLED, HIGH);
   drive.rightPointTurn(90);
-  drive.rightFollowLine(blue);
+  drive.leftFollowLine(blue);
   digitalWrite(Pins::blueStateLED, LOW);
   digitalWrite(Pins::greenStateLED, HIGH);
 }
 
 void Chall1::bot2_find_yellow() {
   Drive& drive = Drive::getInstance();
-  drive.rightSoftCurveTurn();
-  while (getColor() != yellow)
-    millisDelay(10);
-  drive.stop();
+  drive.forwardToColor(yellow);
 
   digitalWrite(Pins::yellowStateLED, HIGH);
 }

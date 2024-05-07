@@ -9,15 +9,20 @@ bool collision_detected() {
 
 bool collision_detected_alert() {
   if (analogRead(Pins::collisionIn) > collision_threshold) {
-    digitalWrite(Pins::horn, HIGH);
-    delay(50);
-    digitalWrite(Pins::horn, LOW);
-    delay(50);
-    digitalWrite(Pins::horn, HIGH);
-    delay(50);
-    digitalWrite(Pins::horn, LOW);
-    delay(50);
+    wallDetectedNoise();
     return true;
   }
   return false;
+}
+
+void wallDetectedNoise() {
+  for (int j = 0; j < 3; j++) {
+    for (int i = 0; i < 700; i++) {
+      digitalWrite(Pins::horn, HIGH); // Set the output pin HIGH
+      delayMicroseconds(170); // Delay for half of the square wave period (208 us)
+      digitalWrite(Pins::horn, LOW); // Set the output pin LOW
+      delayMicroseconds(170); // Delay for half of the square wave period (208 us)
+    }
+    delayMicroseconds(8000);
+  }
 }

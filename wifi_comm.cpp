@@ -1,9 +1,11 @@
 /*
-   wifi_comm.cpp
-   EE31 Junior Design Spring 2024
-   Eddy Zhang
-   */
-
+ * wifi_comm.cpp
+ * Purple Mountain Majesties
+ *  - Eddy Zhang, Alexander Lea, Connor Nightingale, Jacob Carulli
+ * Spring 2024
+ *
+ */
+ 
 #include <Arduino.h>
 #include <SPI.h>
 #include <WiFiNINA.h>
@@ -15,8 +17,8 @@
 #include "utils.h"
 #include "arduino_secrets.h"
 
-const char Wifi_Comm::ssid[] = SECRET_SSID;        // network SSID (name)
-const char Wifi_Comm::pass[] = SECRET_PASS;    // network password (use for WPA, or use as key for WEP)
+const char Wifi_Comm::ssid[] = SECRET_SSID1;        // network SSID (name)
+const char Wifi_Comm::pass[] = SECRET_PASS1;    // network password (use for WPA, or use as key for WEP)
 const int Wifi_Comm::keyIndex = 0;             // network key Index number (needed only for WEP)
 const int Wifi_Comm::portNumber = 80;          // defult 
 int Wifi_Comm::status = WL_IDLE_STATUS;
@@ -153,16 +155,17 @@ void Wifi_Comm::chall1_red_bot1() {
   millisDelay(150);
   digitalWrite(Pins::redStateLED, HIGH);
 
-  char response[64];
-  GETServer(response);
+  POSTServer("state=red");
 
-  char prev[64];
-  strcpy(prev, response);
-  POSTServer("finito rojo");
+  String response = "";
+  char data[512];
 
-  while (strcmp(prev, response))
-    GETServer(response);
-
+  while (response != "red") {
+    GETServer(data);
+    response = String(data);
+    response = response.substring(response.indexOf("state=") + 6, response.indexOf("state=") + 9);
+  }
+  
   digitalWrite(Pins::redStateLED, LOW);
   millisDelay(150);
   digitalWrite(Pins::redStateLED, HIGH);
@@ -180,56 +183,118 @@ void Wifi_Comm::chall1_red_bot1() {
 }
 
 void Wifi_Comm::chall1_yellow_bot1() {
-  POSTServer("finito amarillo");
+  POSTServer("state=yellow");
 }
 
-void Wifi_Comm::chall1_red_bot2_setup(char *buff) {
-  GETServer(buff);
-}
+void Wifi_Comm::chall1_red_bot2() {
+  String response = "";
+  char data[512];
 
-bool Wifi_Comm::chall1_red_bot2_poll(char *prev) {
-  Drive& drive = Drive::getInstance();
-  char updated = malloc(65);
-  GETServer(updated);
-
-  bool server_updated = strcmp(updated, prev);
-  free(updated);
-
-  if (server_updated) {
-    drive.stop();
-
-    digitalWrite(Pins::redStateLED, HIGH);
-    millisDelay(150);
-    digitalWrite(Pins::redStateLED, LOW);
-
-    POSTServer("recibido rojo");
+  while (response != "red") {
+    GETServer(data);
+    response = String(data);
+    response = response.substring(response.indexOf("state=") + 6, response.indexOf("state=") + 9);
   }
+  
+  digitalWrite(Pins::redStateLED, HIGH);
+  millisDelay(150);
+  digitalWrite(Pins::redStateLED, LOW);
 
-  return server_updated;
+  POSTServer("state=red");
 }
 
 void Wifi_Comm::chall1_yellow_bot2() {
-  char received = malloc(65);
+  String response = "";
+  char data[512];
 
-  while (strcmp(received, "finito amarillo")) {
-    GETServer(received);
-    Serial.print(received);
-    millisDelay(100);
+  while (response != "yellow") {
+    GETServer(data);
+    response = String(data);
+    response = response.substring(response.indexOf("state=") + 6, response.indexOf("state=") + 12);
+  }
+}
+
+void Wifi_Comm::chall1_go_bot1() {
+  String response = "";
+  char data[512];
+
+  POSTServer("state=go");
+
+  while (response != "go") {
+    GETServer(data);
+    response = String(data);
+    response = response.substring(response.indexOf("state=") + 6, response.indexOf("go") + 8);
+  }
+}
+
+void Wifi_Comm::chall1_go_bot2() {
+  String response = "";
+  char data[512];
+
+
+  while (response != "go") {
+    GETServer(data);
+    response = String(data);
+    response = response.substring(response.indexOf("state=") + 6, response.indexOf("go") + 8);
   }
 
-  free(received);
+  POSTServer("state=go");
 }
 
 void Wifi_Comm::chall1_end() {
-  POSTServer("finito chall1");
+  POSTServer("state=done");
 
-  char received = malloc(65);
+  String response = "";
+  char data[512];
 
-  while (strcmp(received, "finito chall1")) {
-    GETServer(received);
-    Serial.print(received);
-    millisDelay(100);
+  while (response != "done") {
+    GETServer(data);
+    response = String(data);
+    response = response.substring(response.indexOf("state=") + 6, response.indexOf("state=") + 10);
   }
 
-  free(received);
+  digitalWrite(Pins::redStateLED, HIGH);
+  digitalWrite(Pins::blueStateLED, HIGH);
+  digitalWrite(Pins::greenStateLED, HIGH);
+  digitalWrite(Pins::yellowStateLED, HIGH);
+  delay(150);
+
+  digitalWrite(Pins::redStateLED, LOW);
+  digitalWrite(Pins::blueStateLED, LOW);
+  digitalWrite(Pins::greenStateLED, LOW);
+  digitalWrite(Pins::yellowStateLED, LOW);
+  delay(150);
+
+  digitalWrite(Pins::redStateLED, HIGH);
+  digitalWrite(Pins::blueStateLED, HIGH);
+  digitalWrite(Pins::greenStateLED, HIGH);
+  digitalWrite(Pins::yellowStateLED, HIGH);
+  delay(150);
+
+  digitalWrite(Pins::redStateLED, LOW);
+  digitalWrite(Pins::blueStateLED, LOW);
+  digitalWrite(Pins::greenStateLED, LOW);
+  digitalWrite(Pins::yellowStateLED, LOW);
+  delay(150);
+
+  digitalWrite(Pins::redStateLED, HIGH);
+  digitalWrite(Pins::blueStateLED, HIGH);
+  digitalWrite(Pins::greenStateLED, HIGH);
+  digitalWrite(Pins::yellowStateLED, HIGH);
+  delay(150);
+
+  digitalWrite(Pins::redStateLED, LOW);
+  digitalWrite(Pins::blueStateLED, LOW);
+  digitalWrite(Pins::greenStateLED, LOW);
+  digitalWrite(Pins::yellowStateLED, LOW);
+  delay(150);
+
+  digitalWrite(Pins::horn, HIGH);
+  delay(150);
+  digitalWrite(Pins::horn, LOW);
+  delay(150);
+  digitalWrite(Pins::horn, HIGH);
+  delay(150);
+  digitalWrite(Pins::horn, LOW);
+  delay(150);
 }

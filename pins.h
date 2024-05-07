@@ -20,7 +20,12 @@ public:
   const static int motor4;
 
   // Color detection system for path following
+  const static int redSensorLED;
+  const static int blueSensorLED;
   const static int colorIn;
+
+  // Ambient light sensor (Note: Currently cannot be run with line following)
+  const static int ambientLightSensor;
 
   // IR detection system for collision
   const static int collisionIn;

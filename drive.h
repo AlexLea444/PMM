@@ -39,6 +39,8 @@ public:
 
   void forwardFor(int time);
   void forwardForScaled(int time, float scaler);
+  void forwardAt(float scaler);
+  void forwardTrapezoidal(int total_time, float pct_at_vmax, float vmax);
   void backwardFor(int time);
   void leftPointTurn(unsigned long degrees);
   void rightPointTurn(unsigned long degrees);

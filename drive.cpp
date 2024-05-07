@@ -12,6 +12,7 @@
 #include "pins.h"
 #include "collision.h"
 #include "utils.h"
+#include "wifi_comm.h"
 
 // Define the static method to get the instance
 Drive& Drive::getInstance() {
@@ -24,9 +25,18 @@ void Drive::forward() {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
   analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 100);
-  analogWrite(Pins::motor3, 142);
+  analogWrite(Pins::motor2, 150);
+  analogWrite(Pins::motor3, 162);
   analogWrite(Pins::motor4, 0);
+}
+
+void Drive::forwardAt(float scaler) {
+  digitalWrite(Pins::headlights, HIGH);
+  digitalWrite(Pins::brakelights, LOW);
+  analogWrite(Pins::motor1, 0);
+  analogWrite(Pins::motor2, 100 * scaler);
+  analogWrite(Pins::motor3, 142 * scaler);
+  analogWrite(Pins::motor4, 0);  
 }
 
 void Drive::backward() {
@@ -100,7 +110,7 @@ void Drive::leftFollowLine(color c) {
   //Serial.println("STARTING LINE FOLLOW");
   //forward();
   while (not collision_detected()) {
-    color c_new = getColorLineFollowing();
+    color c_new = detectColor();
     //Serial.println(colorToString(c_new));
     
     if (c_new == c) {
@@ -131,7 +141,7 @@ void Drive::rightFollowLine(color c) {
   //Serial.println("STARTING LINE FOLLOW");
   //forward();
   while (not collision_detected()) {
-    color c_new = getColorLineFollowing();
+    color c_new = detectColor();
     //Serial.println(colorToString(c_new));
     
     if (c_new == c) {
@@ -155,13 +165,23 @@ void Drive::forwardToWall() {
 }
 
 void Drive::forwardToColor(color c) {
+
   forward();
-  while (getColorPrecise() != c) {
-    Serial.println(analogRead(Pins::colorIn));
-    millisDelay(100);
-    //Serial.println(colorToString(getColor()));
+  while (detectColor() != c) {}
+  
+  if (c == yellow) {
+    stop();
+    return;
   }
-  stop();
+  
+  delay(10);
+  
+  if (detectColor() == c) {
+    stop();
+    return;
+  } else {
+    forwardToColor(c);
+  }
 }
 
 void Drive::forwardFor(int time) {
@@ -174,27 +194,27 @@ void Drive::forwardForScaled(int time, float scaler) {
   digitalWrite(Pins::headlights, HIGH);
   digitalWrite(Pins::brakelights, LOW);
 
-  analogWrite(Pins::motor1, 0);
-  analogWrite(Pins::motor2, 130 / scaler);
-  analogWrite(Pins::motor3, 160 / scaler);
-  analogWrite(Pins::motor4, 0);
+  forwardAt(scaler);
+
   millisDelay(time);
   stop();
 }
 
 void Drive::chall5() {
-  millisDelay(5000);
 
   forward();
   millisDelay(10);
 
-  for (int i = 0; i < 3998; i++) {
-    if ((i % 12) and (i % 13))
-      stop();
-    else
-      forward();
-    millisDelay(5);
+  while(true) {
+    for (int i = 0; i < 3998; i++) {
+      if ((i % 12) and (i % 13))
+        stop();
+      else
+        forward();
+      millisDelay(5);
+    }
   }
+  
 
 }
 
@@ -315,9 +335,41 @@ void Drive::rightSharpTurn() {
   digitalWrite(Pins::rightTurnSignal, LOW);
 }
 
-
-
 void Drive::stopFor(int time) {
   stop();
   millisDelay(time);
+}
+
+void Drive::forwardTrapezoidal(int total_time, float pct_at_vmax, float vmax) {
+  float top_time = total_time * pct_at_vmax;
+  float acceleration_time = ((float)total_time - top_time) / 2;
+
+  if (vmax <= 0 || pct_at_vmax <= 0 || total_time <= 0) {
+    Serial.println("trapezoidalForward given non-positive, exiting.");
+    return;
+  } else if (vmax > 1 || pct_at_vmax > 1) {
+    Serial.println("vmax and pct_at_vmax must be between 0 and 1");
+    return;
+  }
+
+  auto start_time = millis();
+  while (millis() < start_time + acceleration_time) {
+    Serial.println("ACCELERATING");
+    forwardAt(((float)(millis() - start_time) / acceleration_time) * vmax);
+    delay(10);
+  }
+
+  start_time += acceleration_time;
+  while (millis() < start_time + top_time) {
+    Serial.println("AT MAX VELOCITY");
+    forwardAt(vmax);
+    delay(10);
+  }
+
+  start_time += top_time;
+  while (millis() < start_time + acceleration_time) {
+    Serial.println("DECELERATING");
+    forwardAt(vmax * (1 - ((float)(millis() - start_time) / acceleration_time)));
+    delay(10);
+  }
 }

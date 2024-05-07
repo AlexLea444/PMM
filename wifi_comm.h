@@ -1,3 +1,11 @@
+/*
+ * wifi_comm.h
+ * Purple Mountain Majesties
+ *  - Eddy Zhang, Alexander Lea, Connor Nightingale, Jacob Carulli
+ * Spring 2024
+ *
+ */
+
 #ifndef __WIFI_COMM_H__
 #define __WIFI_COMM_H__
 
@@ -9,8 +17,9 @@ public:
   void setup();
 
   void chall1_red_bot1();
-  void chall1_red_bot2_setup(char *buff);
-  bool chall1_red_bot2_poll(char *prev);
+  void chall1_red_bot2();
+  void chall1_go_bot1();
+  void chall1_go_bot2();
   void chall1_yellow_bot1();
   void chall1_yellow_bot2();
   void chall1_end();

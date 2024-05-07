@@ -11,8 +11,9 @@
 
 #include <Arduino.h>
 
-enum color {red, blue, yellow, black};
+enum color {none, red, blue, yellow, black};
 
+color detectColor();
 color analogToColor(int reading);
 color getColor();
 color getColorPrecise();

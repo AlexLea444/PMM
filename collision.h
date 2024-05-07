@@ -5,5 +5,6 @@ const static int collision_threshold = 150;
 
 bool collision_detected();
 bool collision_detected_alert();
+void wallDetectedNoise();
 
 #endif

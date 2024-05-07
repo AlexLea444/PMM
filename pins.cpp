@@ -16,7 +16,13 @@ const int Pins::motor3 = 10;
 const int Pins::motor4 = 9;
 
 // Color detection system for path following
+//  Future: red & blue sensor LED can be run from SCL/SDA pins
+const int Pins::redSensorLED = A2;
+const int Pins::blueSensorLED =  A0;
 const int Pins::colorIn = A3;
+
+// Ambient light sensor (Note: Currently cannot be run with line following)
+const int Pins::ambientLightSensor = A2;
 
 // IR detection system for collision
 const int Pins::collisionIn = A1;
@@ -27,7 +33,7 @@ const int Pins::commIn = A4;
 
 // Battery management system
 const int Pins::batteryMgmtLED = 3;
-const int Pins::batteryMgmtIn = A0;
+const int Pins::batteryMgmtIn = A5;
 
 // Indicators
 const int Pins::headlights = 0;
@@ -40,12 +46,21 @@ const int Pins::greenStateLED = 12;
 const int Pins::yellowStateLED = 2;
 const int Pins::horn = 4;
 
+/* Function: setPins
+ * Description: Sets all bot pins to INPUT/OUTPUT
+ *              MUST BE RUN BEFORE USING PINS
+ * Parameters:
+ *   - None
+ * Returns: None
+ */
 void Pins::setPins() {
   pinMode(motor1, OUTPUT);
   pinMode(motor2, OUTPUT);
   pinMode(motor3, OUTPUT);
   pinMode(motor4, OUTPUT);
 
+  pinMode(redSensorLED, OUTPUT);
+  pinMode(blueSensorLED, OUTPUT);
   pinMode(colorIn, INPUT);
 
   pinMode(collisionIn, INPUT);
